@@ -1,0 +1,27 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-consistent-codestyle"
+  ],
+  "jsRules": {},
+  "rules": {
+    "trailing-comma": false,
+    "ordered-imports": false,
+    "object-literal-sort-keys": false,
+    "no-string-literal": false,
+    "no-angle-bracket-type-assertion": false,
+    "no-empty-interface": false,
+    "variable-name": false,
+    "forin": false,
+    "quotemark": [true, "single"],
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "interface-name": [true, "never-prefix"],
+    "member-access": [true, "no-public"],
+    "naming-convention": [
+      true,
+      {"type": "member", "modifiers": "protected", "leadingUnderscore": "require"}
+    ],
+    "member-ordering": [true, "instance-sandwich"]
+  }
+}
