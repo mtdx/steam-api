@@ -21,6 +21,22 @@ const plugins = [{
   register: Nes
 }];
 
+const accounts = {
+    1: {
+        id: 1,
+        username: 'admin',
+        scope: ['user']
+    }
+};
+
+const validateUser =  (request, decodedToken, callback) => {
+    const credentials = accounts[decodedToken.accountId] || {};
+    if (!credentials) {
+        return callback(null, false, credentials);
+    }
+    return callback(null, true, credentials);
+};
+
 /**
  * Initialize Hapi server
  */
@@ -37,6 +53,7 @@ server.register(plugins as any)
 .then(() => {
   server.auth.strategy('token', 'jwt', {
         key: process.env.STEAMAPP_TOKEN_SIGNING_KEY || 'InsecurePrivateKey',
+        validateFunc: validateUser,
         verifyOptions: {
             algorithms: [ 'HS256' ],
         }

@@ -1,4 +1,4 @@
-import { dummyTable } from './dummyTable';
-import { dummyTable2 } from './dummyTable2';
+import { auth } from './auth';
+import { home } from './home';
 
-export const routes = [].concat(dummyTable, dummyTable2);
+export const routes = [].concat(auth, home);

@@ -1,14 +1,14 @@
-export const dummyTable2 = [
+export const home = [
     {
         method: 'GET',
-        path: '/dr2',
+        path: '/',
         config: {
             auth: {
                 strategy: 'token',
                 scope: ['user']
             },
              handler: (request, reply) => {
-                reply('Hello!');
+                reply('aaaa2');
              }
         }
     }
