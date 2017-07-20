@@ -1,6 +1,6 @@
     todo
         - get friends of friends of friends that have csgo game
-
+        - auto add groups people are members of
 
 ## API
 
