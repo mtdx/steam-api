@@ -1,3 +1,5 @@
+import { Scope } from '../../common/scope';
+
 export const home = [
     {
         method: 'GET',
@@ -5,11 +7,11 @@ export const home = [
         config: {
             auth: {
                 strategy: 'token',
-                scope: ['user']
+                scope: Scope.User
             },
-             handler: (request, reply) => {
-                reply('aaaa2');
-             }
+            handler: (request, reply) => {
+                reply('Hello World');
+            }
         }
     }
 ];

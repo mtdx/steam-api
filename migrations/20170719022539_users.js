@@ -1,15 +1,18 @@
 
 exports.up = knex =>
   knex.schema.createTable('users', table => {
-    table.string('id')
+    table.bigIncrements('id')
       .notNullable()
       .primary();
 
-    table.string('username')
+    table.string('username', 20)
       .notNullable()
       .unique();
 
-    table.string('password')
+    table.string('password', 40)
+      .notNullable();
+
+    table.string('scope', 1)
       .notNullable();
   });
 
