@@ -1,6 +1,6 @@
 
 exports.up = knex =>
-  knex.schema.createTable('groups', table => {
+  knex.schema.createTable('steam_groups', table => {
     table.bigIncrements('id')
       .notNullable()
       .primary();
@@ -17,4 +17,4 @@ exports.up = knex =>
   });
 
 exports.down = knex =>
-  knex.schema.dropTable('groups');
+  knex.schema.dropTable('steam_groups');
