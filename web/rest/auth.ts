@@ -1,6 +1,7 @@
 import * as jwt from 'jsonwebtoken';
-import * as joi from 'joi';
+import * as Joi from 'joi';
 import { db } from '../../common/db';
+import { TokenSchema, ErrorSchema } from '../../schemas/shared';
 
 const privateKey = process.env.STEAMAPP_TOKEN_SIGNING_KEY || 'InsecurePrivateKey';
 
@@ -17,8 +18,8 @@ export const auth = [
         config: {
             validate: {
                 payload: {
-                    username: joi.string().alphanum().min(3).max(20).required(),
-                    password: joi.string().min(6).max(40).required()
+                    username: Joi.string().alphanum().min(3).max(20).required(),
+                    password: Joi.string().min(6).max(40).required()
                 }
             },
             handler: async (request, reply) => {
@@ -31,6 +32,12 @@ export const auth = [
                 const token = jwt.sign({ id: user.id, username: request.payload.username, scope: user.scope },
                     privateKey, { algorithm: 'HS256' });
                 reply({ statusCode: 200, token });
+            },
+            response: {
+                status: {
+                    401: ErrorSchema,
+                    200: TokenSchema
+                }
             }
         }
     }
