@@ -9,7 +9,7 @@ describe('/auth route & / login', () => {
   beforeAll(async done => {
     setTimeout(() => {
       done();
-    }, 20);
+    }, 20); // give time for routes to register
   });
 
   beforeAll(async done => {
