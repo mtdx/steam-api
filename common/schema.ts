@@ -6,11 +6,6 @@ export const ErrorSchema = Joi.object({
     message: Joi.string(),
 });
 
-export const UserSchema = Joi.object({
-    id: Joi.number().required(),
-    username: Joi.string().alphanum().min(3).max(20).required(),
-});
-
 export const TokenSchema = Joi.object({
     statusCode: Joi.number().required(),
     token: [Joi.string().required(), Joi.number().required()]

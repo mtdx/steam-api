@@ -1,5 +1,5 @@
 import * as Logger from 'bunyan';
-import { User } from '../domain/User';
+import { User } from './User';
 import { IDatabase } from 'pg-promise';
 
 export class UserService {
