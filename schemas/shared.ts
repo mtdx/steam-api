@@ -2,7 +2,8 @@ import * as Joi from 'joi';
 
 export const ErrorSchema = Joi.object({
     statusCode: Joi.number().required(),
-    error: Joi.string().required()
+    error: Joi.string().required(),
+    message: Joi.string(),
 });
 
 export const UserSchema = Joi.object({
