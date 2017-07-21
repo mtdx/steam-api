@@ -25,7 +25,7 @@ const plugins = [{
 /**
  * Initialize Hapi server
  */
-const server = new Server();
+export const server = new Server();
 
 server.connection({
   port: process.env.STEAMAPP_HTTP_PORT || 8080,

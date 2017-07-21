@@ -23,21 +23,18 @@ export const auth = [
             handler: async (request, reply) => {
                 // obviously password should be salted and hashed but for personal use is OK.
                 const user: User = await (new UserService(db, log))
-                .findByUsernameAndPassword(request.payload.username, request.payload.password);
+                    .findByUsernameAndPassword(request.payload.username, request.payload.password);
                 if (!user) {
                     reply({
                         statusCode: 401,
                         error: 'Authentication Failed',
                         message: 'Invalid Username or Password'
                     }).code(401);
-                    return;
+                } else {
+                    const token = jwt.sign({ id: user.id, username: request.payload.username, scope: user.scope },
+                        privateKey, { algorithm: 'HS256' });
+                    reply({ statusCode: 200, token }).code(200);
                 }
-                const token = jwt.sign({ id: user.id, username: request.payload.username, scope: user.scope },
-                    privateKey, { algorithm: 'HS256' });
-                reply({
-                    statusCode: 200,
-                    token
-                }).code(200);
             },
             response: {
                 status: {
