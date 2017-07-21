@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 
 export const ErrorSchema = Joi.object({
     statusCode: Joi.number().required(),
-    error: Joi.string()
+    error: Joi.string().required()
 });
 
 export const UserSchema = Joi.object({
@@ -12,5 +12,5 @@ export const UserSchema = Joi.object({
 
 export const TokenSchema = Joi.object({
     statusCode: Joi.number().required(),
-    token: [Joi.string(), Joi.number()]
+    token: [Joi.string().required(), Joi.number().required()]
 });
