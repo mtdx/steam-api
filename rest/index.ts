@@ -1,5 +1,5 @@
-import { auth } from './routes/auth';
-import { home } from './routes/home';
-import { groups } from './routes/groups';
+import { auth } from '../user/auth.routes';
+import { home } from './home';
+import { groups } from '../steam/groups/routes';
 
 export const routes = [].concat(auth, home, groups);

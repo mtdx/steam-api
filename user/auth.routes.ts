@@ -1,9 +1,9 @@
-import { UserService } from '../../user/UserService';
+import { UserService } from './UserService';
 import * as jwt from 'jsonwebtoken';
 import * as Joi from 'joi';
-import { db } from '../../common/db';
-import { TokenSchema, ErrorSchema } from '../../common/schema';
-import { User } from '../../user/User';
+import { db } from '../common/db';
+import { TokenSchema, ErrorSchema } from '../common/schema';
+import { User } from './User';
 import * as bunyan from 'bunyan';
 
 const privateKey = process.env.STEAMAPP_TOKEN_SIGNING_KEY || 'InsecurePrivateKey';

@@ -1,4 +1,4 @@
-import { Scope } from '../../common/scope';
+import { Scope } from '../common/scope';
 
 export const home = [
     {
