@@ -4,8 +4,8 @@ import * as Nes from 'nes';
 import * as hapiAuthJwt from 'hapi-auth-jwt';
 
 // import { bunyanReporter } from './web/bunyanReporter';
-import { routes } from './web/rest';
-import { validatejwt } from './web/validatejwt';
+import { routes } from './rest';
+import { validatejwt } from './rest/validatejwt';
 
 const plugins = [
 //   {
