@@ -14,6 +14,10 @@ exports.up = knex =>
       .index();
 
      table.foreign('user_id').references('users.id')  
+
+     table.timestamp('created_at')
+			.notNullable()
+			.defaultTo(knex.raw('CURRENT_TIMESTAMP'));
   });
 
 exports.down = knex =>

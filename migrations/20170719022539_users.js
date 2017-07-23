@@ -14,6 +14,10 @@ exports.up = knex =>
 
     table.string('scope', 1)
       .notNullable();
+    
+    table.timestamp('created_at')
+			.notNullable()
+			.defaultTo(knex.raw('CURRENT_TIMESTAMP'));
   });
 
 exports.down = knex =>
