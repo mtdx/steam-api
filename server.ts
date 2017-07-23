@@ -1,20 +1,21 @@
 import { Server } from 'hapi';
 import * as Nes from 'nes';
-import * as good from 'good';
+// import * as good from 'good';
 import * as hapiAuthJwt from 'hapi-auth-jwt';
 
-import { bunyanReporter } from './web/bunyanReporter';
+// import { bunyanReporter } from './web/bunyanReporter';
 import { routes } from './web/rest';
 import { validatejwt } from './web/validatejwt';
 
-const plugins = [{
-  register: good,
-  options: {
-    reporters: {
-      bunyan: [bunyanReporter]
-    }
-  }
-},
+const plugins = [
+//   {
+//   register: good,
+//   options: {
+//     reporters: {
+//       bunyan: [bunyanReporter]
+//     }
+//   }
+// },
 {
   register: hapiAuthJwt
 },
@@ -44,7 +45,7 @@ server.register(plugins as any)
       }
     });
   })
-  .then(() => server.log('info', 'Plugins registered'))
+ // .then(() => server.log('info', 'Plugins registered'))
   .then(() => server.route(routes))
   .then(() => server.start())
   .catch(error => server.log('error', error));

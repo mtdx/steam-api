@@ -10,7 +10,7 @@ describe('/auth route & / login', () => {
     }, 20); // give time for routes to register
   });
 
-  it('POST /auth -> get token -> GET / & success login -> 200', async done => {
+  it('POST /auth -> get token -> GET / & success login -> 200', done => {
     const options1 = {
       method: 'POST',
       url: '/auth',
@@ -25,7 +25,7 @@ describe('/auth route & / login', () => {
       expect(auth.error).toBeNull();
       expect(auth.value.statusCode).toBe(200);
       expect(auth.value.token).toBeDefined();
-      // -> login
+      // next login
       const options2 = {
         method: 'GET',
         url: '/',
@@ -38,7 +38,7 @@ describe('/auth route & / login', () => {
     });
   });
 
-  it('POST /auth & fails login -> 401', async done => {
+  it('POST /auth & fails login -> 401', done => {
     const options = {
       method: 'POST',
       url: '/auth',
@@ -58,7 +58,7 @@ describe('/auth route & / login', () => {
     });
   });
 
-  it('GET / & fail login (no/bad token) -> 400', async done => {
+  it('GET / & fail login (no/bad token) -> 400', done => {
     const options = {
       method: 'GET',
       url: '/',
@@ -76,7 +76,7 @@ describe('/auth route & / login', () => {
   });
 
   afterAll(async done => {
-    server.stop();
-    done();
+    server.stop().then(done());
   });
+
 });
