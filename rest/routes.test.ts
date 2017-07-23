@@ -1,9 +1,9 @@
 import 'jest';
-import { server } from '../../server';
+import { server } from '../server';
 import * as Joi from 'joi';
-import { ErrorSchema, TokenSchema } from '../../common/schema';
+import { ErrorSchema, TokenSchema } from '../common/schema';
 
-describe('/auth route & / login', () => {
+describe('routes', () => {
   beforeAll(async done => {
     setTimeout(() => {
       done();
