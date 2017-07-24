@@ -18,7 +18,7 @@ describe('/api/v1/steam-group route', () => {
     }, 20); // give time for routes to register
   });
 
-  it('POST & DELETE & GET /api/v1/steam-group -> test auth required -> 401', done => {
+  it('POST & GET /api/v1/steam-group -> test no auth -> 401', done => {
     const options1 = {
       method: 'POST',
       url: '/api/v1/steam-group',
@@ -34,9 +34,22 @@ describe('/api/v1/steam-group route', () => {
       expect(error.value.message).toBe('Missing authentication');
       done();
     });
+
+    const options2 = {
+      method: 'GET',
+      url: '/api/v1/steam-group',
+    };
+    server.inject(options2, response2 => {
+      const error: any = Joi.validate(response2.result, ErrorSchema);
+      expect(response2.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+      expect(error.error).toBeNull();
+      expect(error.value.error).toBe('Unauthorized');
+      expect(error.value.message).toBe('Missing authentication');
+      done();
+    });
   });
 
-  it('POST & DELETE & GET /api/v1/steam-group -> add steam group -> 201', done => {
+  it('POST & DELETE /api/v1/steam-group -> created & deleted', done => {
     const options1 = {
       method: 'POST',
       url: '/api/v1/steam-group',
@@ -60,7 +73,6 @@ describe('/api/v1/steam-group route', () => {
         expect(error.error).toBeNull();
         expect(error.value.error).toBe('Duplicate Steam Group');
         expect(error.value.message).toBe('Steam Group Link Already Exists');
-        done();
       });
       // next test delete
       const options2 = {
@@ -72,6 +84,21 @@ describe('/api/v1/steam-group route', () => {
         expect(response3.statusCode).toBe(HttpStatus.OK);
         done();
       });
+    });
+  });
+
+  it('GET /api/v1/steam-group -> a list of objects', done => {
+    const options = {
+      method: 'GET',
+      url: '/api/v1/steam-group',
+      headers: { Authorization: AUTH_TOKEN },
+    };
+    server.inject(options, response => {
+      const steamGroups: any = Joi.array().items(SteamGroupSchema).validate(response.result);
+      expect(response.statusCode).toBe(HttpStatus.OK);
+      expect(steamGroups.error).toBeNull();
+      expect(steamGroups.value.length).toBeGreaterThanOrEqual(2); // from seed
+      done();
     });
   });
 
