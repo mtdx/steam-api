@@ -18,6 +18,25 @@ describe('/api/v1/steam-group route', () => {
     }, 20); // give time for routes to register
   });
 
+  it('POST & DELETE & GET /api/v1/steam-group -> test auth required -> 401', done => {
+    const options1 = {
+      method: 'POST',
+      url: '/api/v1/steam-group',
+      payload: {
+        group_link: GROUP_NAME,
+      }
+    };
+    server.inject(options1, response1 => {
+      const error: any = Joi.validate(response1.result, ErrorSchema);
+      expect(response1.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+      expect(error.error).toBeNull();
+      expect(error.value.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+      expect(error.value.error).toBe('Unauthorized');
+      expect(error.value.message).toBe('Missing authentication');
+      done();
+    });
+  });
+
   it('POST & DELETE & GET /api/v1/steam-group -> add steam group -> 201', done => {
     const options1 = {
       method: 'POST',
@@ -46,17 +65,16 @@ describe('/api/v1/steam-group route', () => {
         expect(error.value.message).toBe('Steam Group Link Already Exists');
         done();
       });
-
-      // // next delete
-      // const options2 = {
-      //   method: 'GET',
-      //   url: '/api/v1',
-      //   headers: { Authorization: 'Bearer ' + auth.value.token }
-      // };
-      // server.inject(options2, response2 => {
-      //   expect(response2.statusCode).toBe(HttpStatus.OK);
-      //   done();
-      // });
+      // next test delete
+      const options2 = {
+        method: 'DELETE',
+        url: '/api/v1/steam-group/' + steamGroup.value.id,
+        headers: { Authorization: AUTH_TOKEN },
+      };
+      server.inject(options2, response3 => {
+        expect(response3.statusCode).toBe(HttpStatus.OK);
+        done();
+      });
     });
   });
 

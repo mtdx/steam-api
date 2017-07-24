@@ -25,4 +25,9 @@ export class SteamGroupService {
             [status, groupLink, userId]
         );
     }
+
+    async delete(id: number): Promise<void> {
+        //  this._log.info('Request to delete a Steam Group');
+        this._db.none(`DELETE FROM steam_groups WHERE id = $1`, [id]);
+    }
 }

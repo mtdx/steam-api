@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 import { db } from '../../common/db';
 import { SteamGroupService } from './SteamGroupService';
 import * as bunyan from 'bunyan';
-import { ErrorSchema } from '../../common/schema';
+import { ErrorSchema, SuccessSchema } from '../../common/schema';
 import { SteamGroupSchema } from './schema';
 import { SteamGroupStatus, SteamGroup } from './SteamGroup';
 import * as HttpStatus from 'http-status-codes';
@@ -47,6 +47,30 @@ export const groups = [
                 status: {
                     400: ErrorSchema,
                     201: SteamGroupSchema
+                }
+            }
+        }
+    },
+    {
+        method: 'DELETE',
+        path: '/api/v1/steam-group/{id}',
+        config: {
+            auth: {
+                strategy: 'token',
+                scope: Scope.User
+            },
+            validate: {
+                params: {
+                    id: Joi.number().required(),
+                }
+            },
+            handler: async (request, reply) => {
+                await (new SteamGroupService(db, log)).delete(request.params.id);
+                reply({ statusCode: HttpStatus.OK, id: request.params.id }).code(HttpStatus.OK);
+            },
+            response: {
+                status: {
+                    200: SuccessSchema
                 }
             }
         }
