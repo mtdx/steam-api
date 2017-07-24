@@ -22,13 +22,17 @@ export const groups = [
             validate: {
                 query: {
                     page: Joi.number().integer().default(0),
-                    size: Joi.number().integer().min(20).max(120).default(40),
+                    size: Joi.number().integer().max(200).default(40),
                 }
             },
             handler: async (request, reply) => {
-                const steamGroups: SteamGroup[] = await (new SteamGroupService(db, log))
+                const result: SteamGroup[] = await (new SteamGroupService(db, log))
                     .findAll(request.query.size, request.query.page * request.query.size);
-                reply({ steamGroups }).code(HttpStatus.OK);
+                const steamGroups = [];
+                result.forEach(e => {
+                    steamGroups.push({ statusName: SteamGroupStatus[e.status], ...e });
+                });
+                reply(steamGroups).code(HttpStatus.OK);
             },
             response: {
                 schema: Joi.array().items(SteamGroupSchema)

@@ -35,7 +35,7 @@ export class SteamGroupService {
         //  this._log.info('Request to get all Steam Groups');
         return this._db.manyOrNone(
             `SELECT id, status, group_link, created_at FROM steam_groups
-            LIMIT $1 OFFSET $2 ORDER BY id DESC`,
+            ORDER BY id DESC LIMIT $1 OFFSET $2`,
             [limit, offset]);
     }
 }
