@@ -27,14 +27,12 @@ export const auth = [
                     .findByUsernameAndPassword(request.payload.username, request.payload.password);
                 if (!user) {
                     reply({
-                        statusCode: HttpStatus.UNAUTHORIZED,
-                        error: 'Authentication Failed',
-                        message: 'Invalid Username or Password'
+                        error: 'Authentication Failed', message: 'Invalid Username or Password'
                     }).code(HttpStatus.UNAUTHORIZED);
                 } else {
                     const token = jwt.sign({ id: user.id, username: request.payload.username, scope: user.scope },
                         privateKey, { algorithm: 'HS256' });
-                    reply({ statusCode: HttpStatus.OK, token }).code(HttpStatus.OK);
+                    reply({ token }).code(HttpStatus.OK);
                 }
             },
             response: {

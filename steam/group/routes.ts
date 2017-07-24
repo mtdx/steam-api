@@ -9,7 +9,6 @@ import { SteamGroupStatus, SteamGroup } from './SteamGroup';
 import * as HttpStatus from 'http-status-codes';
 
 const log = bunyan.createLogger({ name: 'auth' });
-const DEFAULT_GROUP_STATUS = SteamGroupStatus.WORKING;
 
 export const groups = [
     {
@@ -20,14 +19,19 @@ export const groups = [
                 strategy: 'token',
                 scope: Scope.User
             },
+            validate: {
+                query: {
+                    page: Joi.number().integer().default(0),
+                    size: Joi.number().integer().min(20).max(120).default(40),
+                }
+            },
             handler: async (request, reply) => {
-                await (new SteamGroupService(db, log)).findAll();
-                reply({ statusCode: HttpStatus.OK, steamGroups: request.params.id }).code(HttpStatus.OK);
+                const steamGroups: SteamGroup[] = await (new SteamGroupService(db, log))
+                    .findAll(request.query.size, request.query.page * request.query.size);
+                reply({ steamGroups }).code(HttpStatus.OK);
             },
             response: {
-                status: {
-                    200: SuccessSchema
-                }
+                schema: Joi.array().items(SteamGroupSchema)
             }
         }
     },
@@ -48,18 +52,13 @@ export const groups = [
                 const steamGroupService: SteamGroupService = new SteamGroupService(db, log);
                 if (await steamGroupService.findByGroupLink(request.payload.group_link) != null) {
                     reply({
-                        statusCode: HttpStatus.BAD_REQUEST,
-                        error: 'Duplicate Steam Group',
-                        message: 'Steam Group Link Already Exists'
+                        error: 'Duplicate Steam Group', message: 'Steam Group Link Already Exists'
                     }).code(HttpStatus.BAD_REQUEST);
                 } else {
-                    const steamGroup: SteamGroup = await steamGroupService.add(DEFAULT_GROUP_STATUS,
+                    const steamGroup: SteamGroup = await steamGroupService.add(SteamGroupStatus.WORKING,
                         request.payload.group_link, request.auth.credentials.id);
-                    reply({
-                        statusCode: HttpStatus.CREATED,
-                        statusName: SteamGroupStatus[steamGroup.status],
-                        ...steamGroup
-                    }).code(HttpStatus.CREATED);
+                    reply({ statusName: SteamGroupStatus[steamGroup.status], ...steamGroup })
+                        .code(HttpStatus.CREATED);
                 }
             },
             response: {
@@ -85,7 +84,7 @@ export const groups = [
             },
             handler: async (request, reply) => {
                 await (new SteamGroupService(db, log)).delete(request.params.id);
-                reply({ statusCode: HttpStatus.OK, id: request.params.id }).code(HttpStatus.OK);
+                reply({ id: request.params.id }).code(HttpStatus.OK);
             },
             response: {
                 status: {

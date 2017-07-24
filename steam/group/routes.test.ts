@@ -30,7 +30,6 @@ describe('/api/v1/steam-group route', () => {
       const error: any = Joi.validate(response1.result, ErrorSchema);
       expect(response1.statusCode).toBe(HttpStatus.UNAUTHORIZED);
       expect(error.error).toBeNull();
-      expect(error.value.statusCode).toBe(HttpStatus.UNAUTHORIZED);
       expect(error.value.error).toBe('Unauthorized');
       expect(error.value.message).toBe('Missing authentication');
       done();
@@ -49,7 +48,6 @@ describe('/api/v1/steam-group route', () => {
     server.inject(options1, response1 => {
       const steamGroup: any = Joi.validate(response1.result, SteamGroupSchema);
       expect(response1.statusCode).toBe(HttpStatus.CREATED);
-      expect(steamGroup.value.statusCode).toBe(HttpStatus.CREATED);
       expect(steamGroup.value.statusName).toBe(DEFAULT_GROUP_STATUS);
       expect(steamGroup.value.id).toBeDefined();
       expect(steamGroup.value.status).toBeDefined();
@@ -60,7 +58,6 @@ describe('/api/v1/steam-group route', () => {
         const error: any = Joi.validate(response2.result, ErrorSchema);
         expect(response2.statusCode).toBe(HttpStatus.BAD_REQUEST);
         expect(error.error).toBeNull();
-        expect(error.value.statusCode).toBe(HttpStatus.BAD_REQUEST);
         expect(error.value.error).toBe('Duplicate Steam Group');
         expect(error.value.message).toBe('Steam Group Link Already Exists');
         done();

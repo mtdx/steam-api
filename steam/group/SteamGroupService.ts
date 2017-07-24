@@ -30,4 +30,12 @@ export class SteamGroupService {
         //  this._log.info('Request to delete a Steam Group');
         this._db.none(`DELETE FROM steam_groups WHERE id = $1`, [id]);
     }
+
+    async findAll(limit: number, offset: number): Promise<SteamGroup[]> {
+        //  this._log.info('Request to get all Steam Groups');
+        return this._db.manyOrNone(
+            `SELECT id, status, group_link, created_at FROM steam_groups
+            LIMIT $1 OFFSET $2 ORDER BY id DESC`,
+            [limit, offset]);
+    }
 }

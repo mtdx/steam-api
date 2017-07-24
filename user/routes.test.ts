@@ -24,7 +24,6 @@ describe('/api/v1/auth route & / login', () => {
       const auth: any = Joi.validate(response1.result, TokenSchema);
       expect(response1.statusCode).toBe(HttpStatus.OK);
       expect(auth.error).toBeNull();
-      expect(auth.value.statusCode).toBe(HttpStatus.OK);
       expect(auth.value.token).toBeDefined();
       // next login
       const options2 = {
@@ -52,7 +51,6 @@ describe('/api/v1/auth route & / login', () => {
       expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
       const error: any = Joi.validate(response.result, ErrorSchema);
       expect(error.error).toBeNull();
-      expect(error.value.statusCode).toBe(HttpStatus.UNAUTHORIZED);
       expect(error.value.error).toBe('Authentication Failed');
       expect(error.value.message).toBe('Invalid Username or Password');
       done();
@@ -68,7 +66,6 @@ describe('/api/v1/auth route & / login', () => {
     server.inject(options, response => {
       expect(response.statusCode).toBe(HttpStatus.BAD_REQUEST);
       const error: any = Joi.validate(response.result, ErrorSchema);
-      expect(error.value.statusCode).toBe(HttpStatus.BAD_REQUEST);
       expect(error.value.error).toBe('Bad Request');
       expect(error.value.message).toBe('Bad HTTP authentication header format');
       expect(response.statusCode).toBe(HttpStatus.BAD_REQUEST);
