@@ -1,7 +1,7 @@
 import { UserService } from './UserService';
 import * as jwt from 'jsonwebtoken';
 import * as Joi from 'joi';
-import { db } from '../common/db';
+import { db } from '../server';
 import { TokenSchema, ErrorSchema } from '../common/schema';
 import { User } from './User';
 import * as bunyan from 'bunyan';

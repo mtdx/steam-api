@@ -1,6 +1,6 @@
 import { Scope } from '../../common/scope';
 import * as Joi from 'joi';
-import { db } from '../../common/db';
+import { db } from '../../server';
 import { SteamGroupService } from './SteamGroupService';
 import * as bunyan from 'bunyan';
 import { ErrorSchema, SuccessSchema } from '../../common/schema';
@@ -12,6 +12,25 @@ const log = bunyan.createLogger({ name: 'auth' });
 const DEFAULT_GROUP_STATUS = SteamGroupStatus.WORKING;
 
 export const groups = [
+    {
+        method: 'GET',
+        path: '/api/v1/steam-group',
+        config: {
+            auth: {
+                strategy: 'token',
+                scope: Scope.User
+            },
+            handler: async (request, reply) => {
+                await (new SteamGroupService(db, log)).findAll();
+                reply({ statusCode: HttpStatus.OK, steamGroups: request.params.id }).code(HttpStatus.OK);
+            },
+            response: {
+                status: {
+                    200: SuccessSchema
+                }
+            }
+        }
+    },
     {
         method: 'POST',
         path: '/api/v1/steam-group',

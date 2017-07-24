@@ -1,4 +1,4 @@
-import { db } from '../common/db';
+import { db } from '../server';
 
 const checkUserInDb = async (id: number, username: string, scope: number) =>
     db.oneOrNone(

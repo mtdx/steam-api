@@ -2,8 +2,11 @@ import { Server } from 'hapi';
 import * as Nes from 'nes';
 // import * as good from 'good';
 import * as hapiAuthJwt from 'hapi-auth-jwt';
+import * as pgPromise from 'pg-promise';
+// import * as pgMonitor from 'pg-monitor';
+import { dbOptions } from './common/options';
 
-// import { bunyanReporter } from './web/bunyanReporter';
+// import { bunyanReporter } from './rest/bunyanReporter';
 import { routes } from './rest';
 import { validatejwt } from './rest/validatejwt';
 
@@ -22,6 +25,14 @@ const plugins = [
 {
   register: Nes
 }];
+
+const pgpOptions = {};
+// pgMonitor.attach(pgpOptions);
+
+/**
+ * Initialize the database
+ */
+export const db = pgPromise(pgpOptions)(dbOptions);
 
 /**
  * Initialize Hapi server
