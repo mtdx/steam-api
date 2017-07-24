@@ -5,6 +5,7 @@ import { db } from '../common/db';
 import { TokenSchema, ErrorSchema } from '../common/schema';
 import { User } from './User';
 import * as bunyan from 'bunyan';
+import * as HttpStatus from 'http-status-codes';
 
 const privateKey = process.env.STEAMAPP_TOKEN_SIGNING_KEY || 'InsecurePrivateKey';
 const log = bunyan.createLogger({ name: 'auth' });
@@ -12,7 +13,7 @@ const log = bunyan.createLogger({ name: 'auth' });
 export const auth = [
     {
         method: 'POST',
-        path: '/auth',
+        path: '/api/v1/auth',
         config: {
             validate: {
                 payload: {
@@ -26,14 +27,14 @@ export const auth = [
                     .findByUsernameAndPassword(request.payload.username, request.payload.password);
                 if (!user) {
                     reply({
-                        statusCode: 401,
+                        statusCode: HttpStatus.UNAUTHORIZED,
                         error: 'Authentication Failed',
                         message: 'Invalid Username or Password'
-                    }).code(401);
+                    }).code(HttpStatus.UNAUTHORIZED);
                 } else {
                     const token = jwt.sign({ id: user.id, username: request.payload.username, scope: user.scope },
                         privateKey, { algorithm: 'HS256' });
-                    reply({ statusCode: 200, token }).code(200);
+                    reply({ statusCode: HttpStatus.OK, token }).code(HttpStatus.OK);
                 }
             },
             response: {

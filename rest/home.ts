@@ -3,7 +3,7 @@ import { Scope } from '../common/scope';
 export const home = [
     {
         method: 'GET',
-        path: '/',
+        path: '/api/v1',
         config: {
             auth: {
                 strategy: 'token',
