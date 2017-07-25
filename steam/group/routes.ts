@@ -27,7 +27,8 @@ export const groups = [
             },
             handler: async (request, reply) => {
                 const result: SteamGroup[] = await (new SteamGroupService(db, log))
-                    .findAll(request.query.size, (request.query.page - 1) * request.query.size);
+                    .findAll(request.query.size, (request.query.page - 1) * request.query.size,
+                    request.auth.credentials.id);
                 const steamGroups = [];
                 result.forEach(e => {
                     steamGroups.push({ statusName: SteamGroupStatus[e.status], ...e });
@@ -54,7 +55,8 @@ export const groups = [
             },
             handler: async (request, reply) => {
                 const steamGroupService: SteamGroupService = new SteamGroupService(db, log);
-                if (await steamGroupService.findByGroupLink(request.payload.group_link) != null) {
+                if (await steamGroupService.findByGroupLink(request.payload.group_link,
+                    request.auth.credentials.id) !== null) {
                     reply({
                         error: 'Duplicate Steam Group', message: 'Steam Group Link Already Exists'
                     }).code(HttpStatus.BAD_REQUEST);
@@ -87,7 +89,7 @@ export const groups = [
                 }
             },
             handler: async (request, reply) => {
-                await (new SteamGroupService(db, log)).delete(request.params.id);
+                await (new SteamGroupService(db, log)).delete(request.params.id, request.auth.credentials.id);
                 reply({ id: request.params.id }).code(HttpStatus.OK);
             },
             response: {
