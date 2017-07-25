@@ -1,7 +1,7 @@
 import 'jest';
 import { server } from '../../server';
 import * as Joi from 'joi';
-import { ErrorSchema } from '../../common/schema';
+import { ErrorSchema, SuccessSchema } from '../../common/schema';
 import { SteamGroupSchema } from './schema';
 import { SteamGroupStatus } from './SteamGroup';
 import * as HttpStatus from 'http-status-codes';
@@ -79,7 +79,10 @@ describe('/api/v1/steam-group route', () => {
         headers: { Authorization: AUTH_TOKEN },
       };
       server.inject(options2, response3 => {
+        const success: any = Joi.validate(response3.result, SuccessSchema);
         expect(response3.statusCode).toBe(HttpStatus.OK);
+        expect(success.error).toBeNull();
+        expect(success.value.id).toBe(steamGroup.value.id);
         done();
       });
     });

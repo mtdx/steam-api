@@ -26,10 +26,10 @@ export class SteamGroupService {
         );
     }
 
-    async delete(id: number, userId: number): Promise<void> {
+    async delete(id: number, userId: number): Promise<number> {
         //  this._log.info('Request to delete a Steam Group');
-        this._db.none(
-            `DELETE FROM steam_groups WHERE id = $1 AND user_id = $2`,
+        return this._db.oneOrNone(
+            `DELETE FROM steam_groups WHERE id = $1 AND user_id = $2 RETURNING id`,
             [id, userId]
         );
     }

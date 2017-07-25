@@ -89,8 +89,9 @@ export const groups = [
                 }
             },
             handler: async (request, reply) => {
-                await (new SteamGroupService(db, log)).delete(request.params.id, request.auth.credentials.id);
-                reply({ id: request.params.id }).code(HttpStatus.OK);
+                const result: any = await (new SteamGroupService(db, log)).delete(
+                    request.params.id, request.auth.credentials.id);
+                reply({ id: result.id }).code(HttpStatus.OK);
             },
             response: {
                 status: {
