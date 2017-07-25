@@ -8,6 +8,10 @@ exports.up = knex =>
     table.specificType('status', 'smallint')
       .notNullable()
       .index();
+   
+    table.specificType('role', 'smallint')
+      .notNullable()
+      .index();
 
     table.string('account_name', 64) 
       .notNullable()
@@ -22,8 +26,7 @@ exports.up = knex =>
     table.string('shared_secret', 64) 
       .notNullable();
 
-    table.string('message') 
-      .notNullable();
+    table.string('message');
 
     table.bigInteger('user_id')
       .notNullable()

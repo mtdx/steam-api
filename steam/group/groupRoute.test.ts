@@ -2,8 +2,7 @@ import 'jest';
 import { server } from '../../server';
 import * as Joi from 'joi';
 import { ErrorSchema, SuccessSchema } from '../../common/schema';
-import { SteamGroupSchema } from './schema';
-import { SteamGroupStatus } from './SteamGroup';
+import { SteamGroupStatus, SteamGroupSchema } from './SteamGroup';
 import * as HttpStatus from 'http-status-codes';
 
 // tslint:disable-next-line:max-line-length
@@ -60,7 +59,6 @@ describe('/api/v1/steam-group route', () => {
     server.inject(options1, response1 => {
       const steamGroup: any = Joi.validate(response1.result, SteamGroupSchema);
       expect(response1.statusCode).toBe(HttpStatus.CREATED);
-      expect(steamGroup.value.statusName).toBe(SteamGroupStatus[SteamGroupStatus.WORKING]);
       expect(steamGroup.value.id).toBeGreaterThan(0);
       expect(steamGroup.value.status).toBe(SteamGroupStatus.WORKING); // default status
       expect(steamGroup.value.group_link).toBe(GROUP_NAME);
@@ -103,8 +101,8 @@ describe('/api/v1/steam-group route', () => {
     });
   });
 
-  afterAll(() => {
-    server.stop();
+  afterAll(async () => {
+    await server.stop();
   });
 
 });

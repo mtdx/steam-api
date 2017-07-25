@@ -73,8 +73,8 @@ describe('/api/v1/auth route & / login', () => {
     });
   });
 
-  afterAll(() => {
-    server.stop();
+  afterAll(async () => {
+    await server.stop();
   });
 
 });

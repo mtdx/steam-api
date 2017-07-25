@@ -6,9 +6,9 @@ import * as pgPromise from 'pg-promise';
 // import * as pgMonitor from 'pg-monitor';
 import { dbOptions } from './common/options';
 
-// import { bunyanReporter } from './rest/bunyanReporter';
-import { routes } from './rest';
-import { validatejwt } from './rest/validatejwt';
+// import { bunyanReporter } from './web/bunyanReporter';
+import { routes } from './web';
+import { validatejwt } from './web/validatejwt';
 
 const plugins = [
 //   {

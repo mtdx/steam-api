@@ -4,13 +4,12 @@ import { db } from '../../server';
 import { SteamGroupService } from './SteamGroupService';
 import * as bunyan from 'bunyan';
 import { ErrorSchema, SuccessSchema } from '../../common/schema';
-import { SteamGroupSchema } from './schema';
-import { SteamGroupStatus, SteamGroup } from './SteamGroup';
+import { SteamGroupStatus, SteamGroup, SteamGroupSchema } from './SteamGroup';
 import * as HttpStatus from 'http-status-codes';
 
-const log = bunyan.createLogger({ name: 'auth' });
+const log = bunyan.createLogger({ name: 'steamgroup' });
 
-export const groups = [
+export const group = [
     {
         method: 'GET',
         path: '/api/v1/steam-group',
@@ -26,13 +25,9 @@ export const groups = [
                 }
             },
             handler: async (request, reply) => {
-                const result: SteamGroup[] = await (new SteamGroupService(db, log))
+                const steamGroups: SteamGroup[] = await (new SteamGroupService(db, log))
                     .findAll(request.query.size, (request.query.page - 1) * request.query.size,
                     request.auth.credentials.id);
-                const steamGroups = [];
-                result.forEach(e => {
-                    steamGroups.push({ statusName: SteamGroupStatus[e.status], ...e });
-                });
                 reply(steamGroups).code(HttpStatus.OK);
             },
             response: {
@@ -63,8 +58,7 @@ export const groups = [
                 } else {
                     const steamGroup: SteamGroup = await steamGroupService.add(SteamGroupStatus.WORKING,
                         request.payload.group_link, request.auth.credentials.id);
-                    reply({ statusName: SteamGroupStatus[steamGroup.status], ...steamGroup })
-                        .code(HttpStatus.CREATED);
+                    reply(steamGroup).code(HttpStatus.CREATED);
                 }
             },
             response: {
