@@ -3,7 +3,7 @@ import * as Joi from 'joi';
 import { db } from '../../server';
 import { SteamAccountService } from './SteamAccountService';
 import * as bunyan from 'bunyan';
-import { ErrorSchema, SuccessSchema } from '../../common/schema';
+import { ErrorSchema, SuccessSchema, PaginationSchema } from '../../common/schema';
 import { SteamAccountStatus, SteamAccount, SteamAccountSchema, SteamAccountSchemaIn } from './SteamAccount';
 import * as HttpStatus from 'http-status-codes';
 
@@ -19,10 +19,7 @@ export const account = [
                 scope: Scope.User
             },
             validate: {
-                query: {
-                    page: Joi.number().integer().default(1).positive(),
-                    size: Joi.number().integer().min(10).max(120).default(40),
-                }
+                query: PaginationSchema
             },
             handler: async (request, reply) => {
                 const steamAccounts: SteamAccount[] = await (new SteamAccountService(db, log))

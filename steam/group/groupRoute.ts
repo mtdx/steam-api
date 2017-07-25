@@ -3,8 +3,8 @@ import * as Joi from 'joi';
 import { db } from '../../server';
 import { SteamGroupService } from './SteamGroupService';
 import * as bunyan from 'bunyan';
-import { ErrorSchema, SuccessSchema } from '../../common/schema';
-import { SteamGroupStatus, SteamGroup, SteamGroupSchema } from './SteamGroup';
+import { ErrorSchema, SuccessSchema, PaginationSchema } from '../../common/schema';
+import { SteamGroupStatus, SteamGroup, SteamGroupSchema, SteamGroupSchemaIn } from './SteamGroup';
 import * as HttpStatus from 'http-status-codes';
 
 const log = bunyan.createLogger({ name: 'steamgroup' });
@@ -19,10 +19,7 @@ export const group = [
                 scope: Scope.User
             },
             validate: {
-                query: {
-                    page: Joi.number().integer().default(1).positive(),
-                    size: Joi.number().integer().min(10).max(120).default(40),
-                }
+                query: PaginationSchema
             },
             handler: async (request, reply) => {
                 const steamGroups: SteamGroup[] = await (new SteamGroupService(db, log))
@@ -44,9 +41,7 @@ export const group = [
                 scope: Scope.User
             },
             validate: {
-                payload: {
-                    group_link: Joi.string().regex(/^[a-zA-Z0-9_]{2,32}$/).lowercase().required(),
-                }
+                payload: SteamGroupSchemaIn
             },
             handler: async (request, reply) => {
                 const steamGroupService: SteamGroupService = new SteamGroupService(db, log);

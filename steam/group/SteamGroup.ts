@@ -23,3 +23,7 @@ export const SteamGroupSchema = Joi.object({
     group_link: Joi.string().regex(/^[a-zA-Z0-9_]{2,32}$/).required(),
     created_at: Joi.date().required(),
 });
+
+export const SteamGroupSchemaIn = Joi.object({
+     group_link: Joi.string().regex(/^[a-zA-Z0-9_]{2,32}$/).lowercase().required(),
+});

@@ -13,3 +13,8 @@ export const TokenSchema = Joi.object({
 export const SuccessSchema = Joi.object({
     id: Joi.number().required()
 });
+
+export const PaginationSchema = Joi.object({
+    page: Joi.number().integer().default(1).positive(),
+    size: Joi.number().integer().min(10).max(120).default(40)
+});
