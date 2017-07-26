@@ -7,6 +7,9 @@ export class SteamGroupService {
 
     constructor(protected _db: IDatabase<any>, _log: Logger) {
         this._log = _log.child({ service: 'GroupService' });
+        if (process.env.NODE_ENV === 'test') {
+            this._log.level(Logger.FATAL + 1);
+        }
     }
 
     async findByGroupLink(groupLink: string, userId: number): Promise<SteamGroup> {

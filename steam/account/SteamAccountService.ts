@@ -7,6 +7,9 @@ export class SteamAccountService {
 
     constructor(protected _db: IDatabase<any>, _log: Logger) {
         this._log = _log.child({ service: 'SteamAccountService' });
+        if (process.env.NODE_ENV === 'test') {
+            this._log.level(Logger.FATAL + 1);
+        }
     }
 
     async findByAccountName(accountName: string, userId: number): Promise<SteamAccount> {

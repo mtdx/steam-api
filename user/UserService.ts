@@ -7,6 +7,9 @@ export class UserService {
 
     constructor(protected _db: IDatabase<any>, _log: Logger) {
         this._log = _log.child({ service: 'UserService' });
+        if (process.env.NODE_ENV === 'test') {
+            this._log.level(Logger.FATAL + 1);
+        }
     }
 
     async findByUsernameAndPassword(username: string, password: string): Promise<User> {
