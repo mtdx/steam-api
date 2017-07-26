@@ -40,13 +40,21 @@ export class SteamAccountService {
     }
 
     async update(account: SteamAccount): Promise<SteamAccount> {
-        this._log.info('Call to update new Steam Account');
+        this._log.info('Call to update a Steam Account');
         return this._db.one(
             `UPDATE steam_accounts SET status = $1, role = $2, account_name = $3, account_password = $4,
             identity_secret = $5, shared_secret = $6 WHERE id = $7 AND user_id = $8
              RETURNING id, status, role, account_name, account_password, identity_secret, shared_secret, created_at`,
             [account.status, account.role, account.account_name, account.account_password,
             account.identity_secret, account.shared_secret, account.id, account.user_id]
+        );
+    }
+
+    async updateMessage(message: string, id: number): Promise<SteamAccount> {
+        this._log.info('Call to update a Steam Account message');
+        return this._db.one(
+            `UPDATE steam_accounts SET message = $1 WHERE id = $2 RETURNING id`,
+            [message, id]
         );
     }
 
