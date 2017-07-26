@@ -2,11 +2,11 @@ import * as Logger from 'bunyan';
 import { User } from './User';
 import { IDatabase } from 'pg-promise';
 
-export class UserService {
+export class UserRepository {
     protected _log: Logger;
 
     constructor(protected _db: IDatabase<any>, _log: Logger) {
-        this._log = _log.child({ service: 'UserService' });
+        this._log = _log.child({ service: 'UserRepository' });
         if (process.env.NODE_ENV === 'test') {
             this._log.level(Logger.FATAL + 1);
         }

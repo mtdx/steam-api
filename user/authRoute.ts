@@ -1,4 +1,4 @@
-import { UserService } from './UserService';
+import { UserRepository } from './UserRepository';
 import * as jwt from 'jsonwebtoken';
 import * as Joi from 'joi';
 import { db } from '../server';
@@ -23,7 +23,7 @@ export const auth = [
             },
             handler: async (request, reply) => {
                 // obviously password should be salted and hashed but for personal use is OK.
-                const user: User = await (new UserService(db, log))
+                const user: User = await (new UserRepository(db, log))
                     .findByUsernameAndPassword(request.payload.username, request.payload.password);
                 if (!user) {
                     reply({
