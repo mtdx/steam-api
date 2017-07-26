@@ -1,7 +1,7 @@
 import { Scope } from '../../common/scope';
 import * as Joi from 'joi';
 import { db } from '../../server';
-import { SteamAccountService } from './SteamAccountService';
+import { SteamAccountRepository } from './SteamAccountRepository';
 import * as bunyan from 'bunyan';
 import { ErrorSchema, SuccessSchema, PaginationSchema } from '../../common/schema';
 import { SteamAccountStatus, SteamAccount, SteamAccountSchema, SteamAccountSchemaIn } from './SteamAccount';
@@ -22,7 +22,7 @@ export const account = [
                 query: PaginationSchema
             },
             handler: async (request, reply) => {
-                const steamAccounts: SteamAccount[] = await (new SteamAccountService(db, log))
+                const steamAccounts: SteamAccount[] = await (new SteamAccountRepository(db, log))
                     .findAll(request.query.size, (request.query.page - 1) * request.query.size,
                     request.auth.credentials.id);
                 reply(steamAccounts).code(HttpStatus.OK);
@@ -44,14 +44,14 @@ export const account = [
                 payload: SteamAccountSchemaIn
             },
             handler: async (request, reply) => {
-                const steamAccountService: SteamAccountService = new SteamAccountService(db, log);
-                if (await steamAccountService.findByAccountName(request.payload.account_name,
+                const steamAccountRepository: SteamAccountRepository = new SteamAccountRepository(db, log);
+                if (await steamAccountRepository.findByAccountName(request.payload.account_name,
                     request.auth.credentials.id) !== null) {
                     reply({
                         error: 'Duplicate Steam Account', message: 'Steam Account Already Exists'
                     }).code(HttpStatus.BAD_REQUEST);
                 } else {
-                    const steamAccount: SteamAccount = await steamAccountService.add([
+                    const steamAccount: SteamAccount = await steamAccountRepository.add([
                         SteamAccountStatus.IDLE,
                         request.payload.role,
                         request.payload.account_name,
@@ -86,8 +86,8 @@ export const account = [
                 payload: SteamAccountSchemaIn
             },
             handler: async (request, reply) => {
-                const steamAccountService: SteamAccountService = new SteamAccountService(db, log);
-                const steamAccount: SteamAccount = await steamAccountService.findById(
+                const steamAccountRepository: SteamAccountRepository = new SteamAccountRepository(db, log);
+                const steamAccount: SteamAccount = await steamAccountRepository.findById(
                     request.params.id, request.auth.credentials.id);
                 if (steamAccount === null) {
                     reply({
@@ -99,7 +99,7 @@ export const account = [
                     steamAccount.account_password = request.payload.account_password;
                     steamAccount.identity_secret = request.payload.identity_secret;
                     steamAccount.shared_secret = request.payload.shared_secret;
-                    const steamAccountUpdated: SteamAccount = await steamAccountService.update(steamAccount);
+                    const steamAccountUpdated: SteamAccount = await steamAccountRepository.update(steamAccount);
                     reply(steamAccountUpdated).code(HttpStatus.OK);
                 }
             },
@@ -125,7 +125,7 @@ export const account = [
                 }
             },
             handler: async (request, reply) => {
-                const result: any = await (new SteamAccountService(db, log)).delete(
+                const result: any = await (new SteamAccountRepository(db, log)).delete(
                     request.params.id, request.auth.credentials.id);
                 reply({ id: result.id }).code(HttpStatus.OK);
             },

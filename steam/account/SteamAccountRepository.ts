@@ -2,11 +2,11 @@ import * as Logger from 'bunyan';
 import { SteamAccount } from './SteamAccount';
 import { IDatabase } from 'pg-promise';
 
-export class SteamAccountService {
+export class SteamAccountRepository {
     protected _log: Logger;
 
     constructor(protected _db: IDatabase<any>, _log: Logger) {
-        this._log = _log.child({ service: 'SteamAccountService' });
+        this._log = _log.child({ service: 'SteamAccountRepository' });
         if (process.env.NODE_ENV === 'test') {
             this._log.level(Logger.FATAL + 1);
         }
