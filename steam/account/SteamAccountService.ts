@@ -50,14 +50,6 @@ export class SteamAccountService {
         );
     }
 
-    async updateMessage(message: string, id: number): Promise<SteamAccount> {
-        this._log.info('Call to update a Steam Account message');
-        return this._db.one(
-            `UPDATE steam_accounts SET message = $1 WHERE id = $2 RETURNING id`,
-            [message, id]
-        );
-    }
-
     async delete(id: number, userId: number): Promise<number> {
         this._log.info('Call to delete a Steam Account');
         return this._db.oneOrNone(

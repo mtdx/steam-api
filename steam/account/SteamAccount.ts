@@ -36,7 +36,6 @@ export const SteamAccountSchema = Joi.object({
     account_password: Joi.string().required(),
     identity_secret: Joi.string().required(),
     shared_secret: Joi.string().required(),
-    message: Joi.string(),
     created_at: Joi.date().required(),
 });
 

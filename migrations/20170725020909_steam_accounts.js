@@ -26,8 +26,6 @@ exports.up = knex =>
     table.string('shared_secret', 64) 
       .notNullable();
 
-    table.string('message');
-
     table.bigInteger('user_id')
       .notNullable()
       .index();
