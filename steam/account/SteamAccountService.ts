@@ -13,10 +13,18 @@ export class SteamAccountService {
     }
 
     async findByAccountName(accountName: string, userId: number): Promise<SteamAccount> {
-        this._log.info('Call to find a Steam Account by accountn ame.');
+        this._log.info('Call to find a Steam Account by account name.');
         return this._db.oneOrNone(
             `SELECT * FROM steam_accounts WHERE account_name = $1 AND user_id = $2`,
             [accountName, userId]
+        );
+    }
+
+    async findById(id: number, userId: number): Promise<SteamAccount> {
+        this._log.info('Call to find a Steam Account by id.');
+        return this._db.oneOrNone(
+            `SELECT * FROM steam_accounts WHERE id = $1 AND user_id = $2`,
+            [id, userId]
         );
     }
 
@@ -28,6 +36,17 @@ export class SteamAccountService {
              VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING id, status, role, account_name, account_password, identity_secret, shared_secret, created_at`,
             account
+        );
+    }
+
+    async update(account: SteamAccount): Promise<SteamAccount> {
+        this._log.info('Call to update new Steam Account');
+        return this._db.one(
+            `UPDATE steam_accounts SET status = $1, role = $2, account_name = $3, account_password = $4,
+            identity_secret = $5, shared_secret = $6 WHERE id = $7 AND user_id = $8
+             RETURNING id, status, role, account_name, account_password, identity_secret, shared_secret, created_at`,
+            [account.status, account.role, account.account_name, account.account_password,
+            account.identity_secret, account.shared_secret, account.id, account.user_id]
         );
     }
 

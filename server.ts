@@ -5,7 +5,6 @@ import * as hapiAuthJwt from 'hapi-auth-jwt';
 import * as pgPromise from 'pg-promise';
 import * as pgMonitor from 'pg-monitor';
 import { dbOptions } from './common/options';
-
 import { bunyanReporter } from './web/bunyanReporter';
 import { routes } from './web';
 import { validatejwt } from './web/validatejwt';

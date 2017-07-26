@@ -72,6 +72,46 @@ export const account = [
         }
     },
     {
+        method: 'POST',
+        path: '/api/v1/steam-account/{id}',
+        config: {
+            auth: {
+                strategy: 'token',
+                scope: Scope.User
+            },
+            validate: {
+                params: {
+                    id: Joi.number().required(),
+                },
+                payload: SteamAccountSchemaIn
+            },
+            handler: async (request, reply) => {
+                const steamAccountService: SteamAccountService = new SteamAccountService(db, log);
+                const steamAccount: SteamAccount = await steamAccountService.findById(
+                    request.params.id, request.auth.credentials.id);
+                if (steamAccount === null) {
+                    reply({
+                        error: 'Not Found', message: 'Steam Account Steam Account'
+                    }).code(HttpStatus.BAD_REQUEST);
+                } else {
+                    steamAccount.role = request.payload.role;
+                    steamAccount.account_name = request.payload.account_name;
+                    steamAccount.account_password = request.payload.account_password;
+                    steamAccount.identity_secret = request.payload.identity_secret;
+                    steamAccount.shared_secret = request.payload.shared_secret;
+                    const steamAccountUpdated: SteamAccount = await steamAccountService.update(steamAccount);
+                    reply(steamAccountUpdated).code(HttpStatus.OK);
+                }
+            },
+            response: {
+                status: {
+                    400: ErrorSchema,
+                    200: SteamAccountSchema
+                }
+            }
+        }
+    },
+    {
         method: 'DELETE',
         path: '/api/v1/steam-account/{id}',
         config: {
