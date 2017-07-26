@@ -10,7 +10,7 @@ export class UserService {
     }
 
     async findByUsernameAndPassword(username: string, password: string): Promise<User> {
-        //  this._log.info('Request to get user by username and password.');
+        this._log.info('Call to find a user by username and password.');
         return this._db.oneOrNone(
             `SELECT * FROM users WHERE username = $1 AND password = $2`,
             [username, password]

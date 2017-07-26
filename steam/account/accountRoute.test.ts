@@ -14,33 +14,48 @@ const SHARED_SECRET = 'Qkc`&j"vp#J#(=7)WQg&P2yve(*GRz:}JNkh';
 // const MESSAGE = '';
 
 describe('/api/v1/steam-account route', () => {
-  beforeAll(async done => {
-    setTimeout(() => {
-      done();
-    }, 20); // give time for routes to register
-  });
 
-  it('POST & GET /api/v1/steam-account -> test no auth -> 401', done => {
-    const options1 = {
+  // give time for routes to register
+  beforeAll(async done => setTimeout(() => done(), 20));
+
+  it('POST /api/v1/steam-account -> test no auth -> 401', done => {
+    const options = {
       method: 'POST',
       url: '/api/v1/steam-account'
     };
-    server.inject(options1, response1 => {
-      const error: any = Joi.validate(response1.result, ErrorSchema);
-      expect(response1.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+    server.inject(options, response => {
+      const error: any = Joi.validate(response.result, ErrorSchema);
+      expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
       expect(error.error).toBeNull();
       expect(error.value.error).toBe('Unauthorized');
       expect(error.value.message).toBe('Missing authentication');
       done();
     });
+  });
 
-    const options2 = {
+  it('GET /api/v1/steam-account -> test no auth -> 401', done => {
+    const options = {
       method: 'GET',
       url: '/api/v1/steam-account',
     };
-    server.inject(options2, response2 => {
-      const error: any = Joi.validate(response2.result, ErrorSchema);
-      expect(response2.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+    server.inject(options, response => {
+      const error: any = Joi.validate(response.result, ErrorSchema);
+      expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+      expect(error.error).toBeNull();
+      expect(error.value.error).toBe('Unauthorized');
+      expect(error.value.message).toBe('Missing authentication');
+      done();
+    });
+  });
+
+  it('DELETE /api/v1/steam-account/1 -> test no auth -> 401', done => {
+    const options = {
+      method: 'DELETE',
+      url: '/api/v1/steam-account/1',
+    };
+    server.inject(options, response => {
+      const error: any = Joi.validate(response.result, ErrorSchema);
+      expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
       expect(error.error).toBeNull();
       expect(error.value.error).toBe('Unauthorized');
       expect(error.value.message).toBe('Missing authentication');
@@ -110,8 +125,9 @@ describe('/api/v1/steam-account route', () => {
     });
   });
 
-  afterAll(async () => {
+  afterAll(async done => {
     await server.stop();
+    done();
   });
 
 });

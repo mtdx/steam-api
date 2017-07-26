@@ -10,36 +10,51 @@ const AUTH_TOKEN = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEiLCJ1
 const GROUP_NAME = 'testgroup';
 
 describe('/api/v1/steam-group route', () => {
-  beforeAll(async done => {
-    setTimeout(() => {
-      done();
-    }, 20); // give time for routes to register
-  });
+
+  // give time for routes to register
+  beforeAll(async done => setTimeout(() => done(), 20));
 
   it('POST & GET /api/v1/steam-group -> test no auth -> 401', done => {
-    const options1 = {
+    const options = {
       method: 'POST',
       url: '/api/v1/steam-group',
       payload: {
         group_link: GROUP_NAME,
       }
     };
-    server.inject(options1, response1 => {
-      const error: any = Joi.validate(response1.result, ErrorSchema);
-      expect(response1.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+    server.inject(options, response => {
+      const error: any = Joi.validate(response.result, ErrorSchema);
+      expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
       expect(error.error).toBeNull();
       expect(error.value.error).toBe('Unauthorized');
       expect(error.value.message).toBe('Missing authentication');
       done();
     });
+  });
 
-    const options2 = {
+  it('GET /api/v1/steam-group -> test no auth -> 401', done => {
+    const options = {
       method: 'GET',
       url: '/api/v1/steam-group',
     };
-    server.inject(options2, response2 => {
-      const error: any = Joi.validate(response2.result, ErrorSchema);
-      expect(response2.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+    server.inject(options, response => {
+      const error: any = Joi.validate(response.result, ErrorSchema);
+      expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
+      expect(error.error).toBeNull();
+      expect(error.value.error).toBe('Unauthorized');
+      expect(error.value.message).toBe('Missing authentication');
+      done();
+    });
+  });
+
+  it('DELETE /api/v1/steam-group/1 -> test no auth -> 401', done => {
+    const options = {
+      method: 'DELETE',
+      url: '/api/v1/steam-group/1',
+    };
+    server.inject(options, response => {
+      const error: any = Joi.validate(response.result, ErrorSchema);
+      expect(response.statusCode).toBe(HttpStatus.UNAUTHORIZED);
       expect(error.error).toBeNull();
       expect(error.value.error).toBe('Unauthorized');
       expect(error.value.message).toBe('Missing authentication');
@@ -101,8 +116,9 @@ describe('/api/v1/steam-group route', () => {
     });
   });
 
-  afterAll(async () => {
+  afterAll(async done => {
     await server.stop();
+    done();
   });
 
 });

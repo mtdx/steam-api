@@ -12,22 +12,16 @@ import { validatejwt } from './web/validatejwt';
 
 const plugins = [
   {
-  register: good,
-  options: {
-    reporters: {
-      bunyan: [bunyanReporter]
-    }
-  }
-},
-{
-  register: hapiAuthJwt
-},
-{
-  register: Nes
-}];
+    register: hapiAuthJwt
+  },
+  {
+    register: Nes
+  }];
 
 const pgpOptions = {};
-pgMonitor.attach(pgpOptions);
+if (process.env.NODE_ENV !== 'test') {
+  pgMonitor.attach(pgpOptions);
+}
 
 /**
  * Initialize the database
@@ -48,6 +42,18 @@ server.connection({
 
 server.register(plugins as any)
   .then(() => {
+    if (process.env.NODE_ENV !== 'test') {
+      server.register({
+        register: good,
+        options: {
+          reporters: {
+            bunyan: [bunyanReporter]
+          }
+        }
+      });
+    }
+  })
+  .then(() => {
     server.auth.strategy('token', 'jwt', {
       key: process.env.STEAMAPP_TOKEN_SIGNING_KEY || 'InsecurePrivateKey',
       validateFunc: validatejwt,
@@ -56,7 +62,7 @@ server.register(plugins as any)
       }
     });
   })
- // .then(() => server.log('info', 'Plugins registered'))
+  // .then(() => server.log('info', 'Plugins registered'))
   .then(() => server.route(routes))
   .then(() => server.start())
   .catch(error => server.log('error', error));

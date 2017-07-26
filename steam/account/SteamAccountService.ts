@@ -10,7 +10,7 @@ export class SteamAccountService {
     }
 
     async findByAccountName(accountName: string, userId: number): Promise<SteamAccount> {
-        //  this._log.info('Request to get a Steam Account by account_name.');
+        this._log.info('Call to find a Steam Account by accountn ame.');
         return this._db.oneOrNone(
             `SELECT * FROM steam_accounts WHERE account_name = $1 AND user_id = $2`,
             [accountName, userId]
@@ -18,18 +18,18 @@ export class SteamAccountService {
     }
 
     async add(account: SteamAccount[]): Promise<SteamAccount> {
-        //  this._log.info('Request to add a new Steam Group');
+        this._log.info('Call to add a new Steam Account');
         return this._db.one(
             `INSERT INTO steam_accounts
             (status, role, account_name, account_password, identity_secret, shared_secret, user_id)
              VALUES ($1, $2, $3, $4, $5, $6, $7)
              RETURNING id, status, role, account_name, account_password, identity_secret, shared_secret, created_at`,
-             account
+            account
         );
     }
 
     async delete(id: number, userId: number): Promise<number> {
-        //  this._log.info('Request to delete a Steam Group');
+        this._log.info('Call to delete a Steam Account');
         return this._db.oneOrNone(
             `DELETE FROM steam_accounts WHERE id = $1 AND user_id = $2 RETURNING id`,
             [id, userId]
@@ -37,7 +37,7 @@ export class SteamAccountService {
     }
 
     async findAll(limit: number, offset: number, userId: number): Promise<SteamAccount[]> {
-        //  this._log.info('Request to get all Steam Groups');
+        this._log.info('Call to get all Steam Accounts');
         return this._db.manyOrNone(
             `SELECT id, status, role, account_name, account_password, identity_secret, shared_secret, created_at
              FROM steam_accounts WHERE user_id = $3 ORDER BY id DESC LIMIT $1 OFFSET $2`,

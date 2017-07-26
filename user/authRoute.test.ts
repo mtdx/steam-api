@@ -5,11 +5,9 @@ import { ErrorSchema, TokenSchema } from '../common/schema';
 import * as HttpStatus from 'http-status-codes';
 
 describe('/api/v1/auth route & / login', () => {
-  beforeAll(async done => {
-    setTimeout(() => {
-      done();
-    }, 20); // give time for routes to register
-  });
+
+  // give time for routes to register
+  beforeAll(async done => setTimeout(() => done(), 20));
 
   it('POST /api/v1/auth -> get token -> GET / & success login -> 200', done => {
     const options1 = {
@@ -73,8 +71,9 @@ describe('/api/v1/auth route & / login', () => {
     });
   });
 
-  afterAll(async () => {
+  afterAll(async done => {
     await server.stop();
+    done();
   });
 
 });
