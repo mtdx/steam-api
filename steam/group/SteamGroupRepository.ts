@@ -6,7 +6,7 @@ export class SteamGroupRepository {
     protected _log: Logger;
 
     constructor(protected _db: IDatabase<any>, _log: Logger) {
-        this._log = _log.child({ service: 'GroupService' });
+        this._log = _log.child({ service: 'GroupRepository' });
         if (process.env.NODE_ENV === 'test') {
             this._log.level(Logger.FATAL + 1);
         }
